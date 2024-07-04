@@ -4,7 +4,7 @@ import type { ActiveTestCaseIndex, MermaidData } from "./index.tsx";
 interface CustomTestProps {
   onChange: (
     definition: MermaidData["definition"],
-    activeTestCaseIndex: ActiveTestCaseIndex
+    activeTestCaseIndex: ActiveTestCaseIndex,
   ) => void;
   mermaidData: MermaidData;
   activeTestCaseIndex: ActiveTestCaseIndex;

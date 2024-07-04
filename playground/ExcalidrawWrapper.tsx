@@ -31,7 +31,11 @@ const ExcalidrawWrapper = ({
     }
 
     const { elements, files } = graphToExcalidraw(mermaidOutput, {
-      fontSize: DEFAULT_FONT_SIZE,
+      fontSize: 12,
+      // backgroundColor: "blue",
+      // fillStyle: "solid",
+      // rounded: true,
+      prettify: true,
     });
 
     excalidrawAPI.updateScene({

@@ -5,6 +5,19 @@ import { encodeEntities } from "./utils.js";
 import { Flowchart, parseMermaidFlowChartDiagram } from "./parser/flowchart.js";
 import { Sequence, parseMermaidSequenceDiagram } from "./parser/sequence.js";
 import { Class, parseMermaidClassDiagram } from "./parser/class.js";
+import { QuadrantChart, parseMermaidQuadrantChart } from "./parser/quadrant.js";
+import {
+  JourneyDiagram,
+  parseMermaidJourneyDiagram,
+} from "./parser/journey.js";
+import {
+  MindmapDiagram,
+  parseMermaidMindmapDiagram,
+} from "./parser/mindmap.js";
+import {
+  TimelineDiagram,
+  parseMermaidTimelineDiagram,
+} from "./parser/timeline.js";
 
 // Fallback to Svg
 const convertSvgToGraphImage = (svgContainer: HTMLDivElement) => {
@@ -43,13 +56,22 @@ const convertSvgToGraphImage = (svgContainer: HTMLDivElement) => {
 };
 
 export const parseMermaid = async (
-  definition: string
-): Promise<Flowchart | GraphImage | Sequence | Class> => {
+  definition: string,
+): Promise<
+  | Flowchart
+  | GraphImage
+  | Sequence
+  | Class
+  | QuadrantChart
+  | JourneyDiagram
+  | MindmapDiagram
+  | TimelineDiagram
+> => {
   mermaid.initialize(MERMAID_CONFIG);
 
   // Parse the diagram
   const diagram = await mermaid.mermaidAPI.getDiagramFromText(
-    encodeEntities(definition)
+    encodeEntities(definition),
   );
 
   // Render the SVG diagram
@@ -59,7 +81,7 @@ export const parseMermaid = async (
   const svgContainer = document.createElement("div");
   svgContainer.setAttribute(
     "style",
-    `opacity: 0; position: relative; z-index: -1;`
+    `opacity: 0; position: relative; z-index: -1;`,
   );
   svgContainer.innerHTML = svg;
   svgContainer.id = "mermaid-diagram";
@@ -81,6 +103,27 @@ export const parseMermaid = async (
       data = parseMermaidClassDiagram(diagram, svgContainer);
       break;
     }
+
+    case "quadrantChart": {
+      data = parseMermaidQuadrantChart(diagram, svgContainer);
+      break;
+    }
+
+    case "journey": {
+      data = parseMermaidJourneyDiagram(diagram, svgContainer);
+      break;
+    }
+
+    case "mindmap": {
+      data = parseMermaidMindmapDiagram(diagram, svgContainer);
+      break;
+    }
+
+    case "timeline": {
+      data = parseMermaidTimelineDiagram(diagram, svgContainer);
+      break;
+    }
+
     // fallback to image if diagram type not-supported
     default: {
       data = convertSvgToGraphImage(svgContainer);

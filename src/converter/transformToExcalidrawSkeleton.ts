@@ -19,6 +19,7 @@ export const transformToExcalidrawLineSkeleton = (line: Line) => {
     strokeStyle: line.strokeStyle || "solid",
     strokeColor: line.strokeColor || "#000",
     strokeWidth: line.strokeWidth || 1,
+    roughness: 0,
   };
   if (line.groupId) {
     Object.assign(lineElement, { groupIds: [line.groupId] });
@@ -38,6 +39,8 @@ export const transformToExcalidrawTextSkeleton = (element: Text) => {
     height: element.height,
     text: normalizeText(element.text) || "",
     fontSize: element.fontSize,
+    fontFamily: 6,
+    roughness: 0,
     verticalAlign: "middle",
   };
   if (element.groupId) {
@@ -50,7 +53,7 @@ export const transformToExcalidrawTextSkeleton = (element: Text) => {
 };
 
 export const transformToExcalidrawContainerSkeleton = (
-  element: Exclude<Node, Line | Arrow | Text>
+  element: Exclude<Node, Line | Arrow | Text>,
 ) => {
   let extraProps = {};
   if (element.type === "rectangle" && element.subtype === "activation") {
@@ -69,6 +72,7 @@ export const transformToExcalidrawContainerSkeleton = (
     label: {
       text: normalizeText(element?.label?.text || ""),
       fontSize: element?.label?.fontSize,
+      fontFamily: 6,
       verticalAlign: element.label?.verticalAlign || "middle",
       strokeColor: element.label?.color || "#000",
       groupIds: element.groupId ? [element.groupId] : [],
@@ -78,6 +82,10 @@ export const transformToExcalidrawContainerSkeleton = (
     strokeColor: element?.strokeColor,
     backgroundColor: element?.bgColor,
     fillStyle: "solid",
+    roughness: 0,
+    roundness: {
+      type: 2,
+    },
     ...extraProps,
   };
   if (element.groupId) {
@@ -104,7 +112,9 @@ export const transformToExcalidrawArrowSkeleton = (arrow: Arrow) => {
     label: {
       text: normalizeText(arrow?.label?.text || ""),
       fontSize: 16,
+      fontFamily: 6,
     },
+    roughness: 0,
     roundness: {
       type: 2,
     },

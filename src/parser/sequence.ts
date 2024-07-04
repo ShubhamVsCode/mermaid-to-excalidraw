@@ -119,7 +119,7 @@ const getStrokeStyle = (type: number) => {
 
 const attachSequenceNumberToArrow = (
   node: SVGLineElement | SVGPathElement,
-  arrow: Arrow
+  arrow: Arrow,
 ) => {
   const showSequenceNumber =
     !!node.nextElementSibling?.classList.contains("sequenceNumber");
@@ -148,7 +148,7 @@ const attachSequenceNumberToArrow = (
 const createActorSymbol = (
   rootNode: SVGRectElement,
   text: string,
-  opts?: { id?: string }
+  opts?: { id?: string },
 ) => {
   if (!rootNode) {
     throw "root node not found";
@@ -172,7 +172,7 @@ const createActorSymbol = (
           startY,
           endX,
           endY,
-          { groupId, id }
+          { groupId, id },
         );
         break;
       case "text":
@@ -189,7 +189,7 @@ const createActorSymbol = (
             label: child.textContent ? { text: child.textContent } : undefined,
             groupId,
             id,
-          }
+          },
         );
       default:
         ele = createContainerSkeletonFromSVG(
@@ -200,7 +200,7 @@ const createActorSymbol = (
             label: child.textContent ? { text: child.textContent } : undefined,
             groupId,
             id,
-          }
+          },
         );
     }
     nodeElements.push(ele);
@@ -210,20 +210,20 @@ const createActorSymbol = (
 
 const parseActor = (actors: { [key: string]: Actor }, containerEl: Element) => {
   const actorTopNodes = Array.from(
-    containerEl.querySelectorAll<SVGElement>(".actor-top")
+    containerEl.querySelectorAll<SVGElement>(".actor-top"),
   );
   const actorBottomNodes = Array.from(
-    containerEl.querySelectorAll<SVGElement>(".actor-bottom")
+    containerEl.querySelectorAll<SVGElement>(".actor-bottom"),
   );
 
   const nodes: Array<Node[]> = [];
   const lines: Array<Line> = [];
   Object.values(actors).forEach((actor, index) => {
     const topRootNode = actorTopNodes.find(
-      (actorNode) => actorNode.getAttribute("name") === actor.name
+      (actorNode) => actorNode.getAttribute("name") === actor.name,
     ) as SVGRectElement;
     const bottomRootNode = actorBottomNodes.find(
-      (actorNode) => actorNode.getAttribute("name") === actor.name
+      (actorNode) => actorNode.getAttribute("name") === actor.name,
     ) as SVGRectElement;
 
     if (!topRootNode || !bottomRootNode) {
@@ -235,7 +235,7 @@ const parseActor = (actors: { [key: string]: Actor }, containerEl: Element) => {
       const topNodeElement = createContainerSkeletonFromSVG(
         topRootNode,
         "rectangle",
-        { id: `${actor.name}-top`, label: { text }, subtype: "actor" }
+        { id: `${actor.name}-top`, label: { text }, subtype: "actor" },
       );
       if (!topNodeElement) {
         throw "Top Node element not found!";
@@ -246,7 +246,7 @@ const parseActor = (actors: { [key: string]: Actor }, containerEl: Element) => {
       const bottomNodeElement = createContainerSkeletonFromSVG(
         bottomRootNode,
         "rectangle",
-        { id: `${actor.name}-bottom`, label: { text }, subtype: "actor" }
+        { id: `${actor.name}-bottom`, label: { text }, subtype: "actor" },
       );
       nodes.push([bottomNodeElement]);
 
@@ -270,7 +270,7 @@ const parseActor = (actors: { [key: string]: Actor }, containerEl: Element) => {
         startX,
         startY,
         endX,
-        endY
+        endY,
       );
       lines.push(line);
     } else if (actor.type === "actor") {
@@ -295,7 +295,7 @@ const parseActor = (actors: { [key: string]: Actor }, containerEl: Element) => {
       const endX = Number(lineNode.getAttribute("x2"));
       // Make sure lines don't overlap with the nodes, in mermaid it overlaps but isn't visible as its pushed back and containers are non transparent
       const bottomEllipseNode = bottomNodeElement.find(
-        (node): node is Container => node.type === "ellipse"
+        (node): node is Container => node.type === "ellipse",
       );
       if (bottomEllipseNode) {
         const endY = bottomEllipseNode.y;
@@ -304,7 +304,7 @@ const parseActor = (actors: { [key: string]: Actor }, containerEl: Element) => {
           startX,
           startY,
           endX,
-          endY
+          endY,
         );
         lines.push(line);
       }
@@ -318,11 +318,11 @@ const computeArrows = (messages: Message[], containerEl: Element) => {
   const arrows: Arrow[] = [];
 
   const arrowNodes = Array.from<SVGLineElement>(
-    containerEl.querySelectorAll('[class*="messageLine"]')
+    containerEl.querySelectorAll('[class*="messageLine"]'),
   );
   const supportedMessageTypes = Object.keys(SEQUENCE_ARROW_TYPES);
   const arrowMessages = messages.filter((message) =>
-    supportedMessageTypes.includes(message.type.toString())
+    supportedMessageTypes.includes(message.type.toString()),
   );
 
   arrowNodes.forEach((arrowNode, index) => {
@@ -344,10 +344,10 @@ const computeArrows = (messages: Message[], containerEl: Element) => {
 
 const computeNotes = (messages: Message[], containerEl: Element) => {
   const noteNodes = Array.from(containerEl.querySelectorAll(".note")).map(
-    (node) => node.parentElement
+    (node) => node.parentElement,
   );
   const noteText = messages.filter(
-    (message) => message.type === MESSAGE_TYPE.NOTE
+    (message) => message.type === MESSAGE_TYPE.NOTE,
   );
   const notes: Container[] = [];
   noteNodes.forEach((node, index) => {
@@ -367,7 +367,7 @@ const computeNotes = (messages: Message[], containerEl: Element) => {
 
 const parseActivations = (containerEl: Element) => {
   const activationNodes = Array.from(
-    containerEl.querySelectorAll(`[class*=activation]`)
+    containerEl.querySelectorAll(`[class*=activation]`),
   ) as SVGSVGElement[];
   const activations: Container[] = [];
   activationNodes.forEach((node) => {
@@ -383,7 +383,7 @@ const parseActivations = (containerEl: Element) => {
 
 const parseLoops = (messages: Message[], containerEl: Element) => {
   const lineNodes = Array.from(
-    containerEl.querySelectorAll(".loopLine")
+    containerEl.querySelectorAll(".loopLine"),
   ) as SVGLineElement[];
   const lines: Line[] = [];
   const texts: Text[] = [];
@@ -402,7 +402,7 @@ const parseLoops = (messages: Message[], containerEl: Element) => {
   });
 
   const loopTextNodes = Array.from(
-    containerEl.querySelectorAll(".loopText")
+    containerEl.querySelectorAll(".loopText"),
   ) as SVGTextElement[];
 
   const criticalMessages = messages
@@ -424,7 +424,7 @@ const parseLoops = (messages: Message[], containerEl: Element) => {
   });
 
   const labelBoxes = Array.from(
-    containerEl?.querySelectorAll(".labelBox")
+    containerEl?.querySelectorAll(".labelBox"),
   ) as SVGSVGElement[];
   const labelTextNode = Array.from(containerEl?.querySelectorAll(".labelText"));
 
@@ -465,7 +465,7 @@ const computeHighlights = (containerEl: Element) => {
 
 export const parseMermaidSequenceDiagram = (
   diagram: Diagram,
-  containerEl: Element
+  containerEl: Element,
 ): Sequence => {
   diagram.parse();
 

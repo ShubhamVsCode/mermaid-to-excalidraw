@@ -9,9 +9,10 @@ import {
 } from "../helpers.js";
 import { VERTEX_TYPE } from "../../interfaces.js";
 import { Flowchart } from "../../parser/flowchart.js";
+import { COLORS } from "../../constants.js";
 
 const computeGroupIds = (
-  graph: Flowchart
+  graph: Flowchart,
 ): {
   getGroupIds: (elementId: string) => string[];
   getParentId: (elementId: string) => string | null;
@@ -62,7 +63,7 @@ const computeGroupIds = (
       }
 
       mapper[id] = groupIds;
-    }
+    },
   );
 
   return {
@@ -79,6 +80,7 @@ export const FlowchartToExcalidrawSkeletonConverter = new GraphConverter({
   converter: (graph: Flowchart, options) => {
     const elements: ExcalidrawElementSkeleton[] = [];
     const fontSize = options.fontSize;
+    const prettify = options.prettify;
     const { getGroupIds, getParentId } = computeGroupIds(graph);
 
     // SubGraphs
@@ -93,11 +95,15 @@ export const FlowchartToExcalidrawSkeletonConverter = new GraphConverter({
         y: subGraph.y,
         width: subGraph.width,
         height: subGraph.height,
+        backgroundColor: COLORS.BACKGROUND,
+        strokeColor: COLORS.STROKE,
+        roughness: 0,
         label: {
           groupIds,
           text: getText(subGraph),
           fontSize,
           verticalAlign: "top",
+          fontFamily: 3,
         },
       };
 
@@ -113,7 +119,7 @@ export const FlowchartToExcalidrawSkeletonConverter = new GraphConverter({
 
       // Compute custom style
       const containerStyle = computeExcalidrawVertexStyle(
-        vertex.containerStyle
+        vertex.containerStyle,
       );
       const labelStyle = computeExcalidrawVertexLabelStyle(vertex.labelStyle);
 
@@ -126,10 +132,15 @@ export const FlowchartToExcalidrawSkeletonConverter = new GraphConverter({
         width: vertex.width,
         height: vertex.height,
         strokeWidth: 2,
+        backgroundColor: COLORS.BACKGROUND,
+        strokeColor: COLORS.STROKE,
+        roundness: { type: 3 },
+        roughness: 0,
         label: {
           groupIds,
           text: getText(vertex),
           fontSize,
+          fontFamily: 6,
           ...labelStyle,
         },
         link: vertex.link || null,
@@ -214,14 +225,19 @@ export const FlowchartToExcalidrawSkeletonConverter = new GraphConverter({
         // TODO: use constant exported from Excalidraw package
         strokeWidth: edge.stroke === "thick" ? 4 : 2,
         strokeStyle: edge.stroke === "dotted" ? "dashed" : undefined,
+        strokeColor: COLORS.BLACK,
+        roughness: 0,
         points,
         ...(edge.text
-          ? { label: { text: getText(edge), fontSize, groupIds } }
+          ? {
+              label: { text: getText(edge), fontSize, groupIds, fontFamily: 6 },
+            }
           : {}),
         roundness: {
           type: 2,
         },
         ...arrowType,
+        endArrowhead: "triangle",
       };
 
       // Bind start and end vertex to arrow

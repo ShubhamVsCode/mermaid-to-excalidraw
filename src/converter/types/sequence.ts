@@ -11,6 +11,7 @@ import {
 } from "../transformToExcalidrawSkeleton.js";
 
 import type { ExcalidrawElement } from "../../types.js";
+import { COLORS } from "../../constants.js";
 
 export const SequenceToExcalidrawSkeletonConvertor = new GraphConverter({
   converter: (chart: Sequence) => {
@@ -30,7 +31,10 @@ export const SequenceToExcalidrawSkeletonConvertor = new GraphConverter({
 
           case "rectangle":
           case "ellipse":
+            element.bgColor = COLORS.BACKGROUND;
+            element.strokeColor = COLORS.STROKE;
             excalidrawElement = transformToExcalidrawContainerSkeleton(element);
+
             break;
 
           case "text":
@@ -60,10 +64,14 @@ export const SequenceToExcalidrawSkeletonConvertor = new GraphConverter({
         return;
       }
 
-      elements.push(transformToExcalidrawArrowSkeleton(arrow));
+      arrow.endArrowhead = "triangle";
+      elements.push({
+        ...transformToExcalidrawArrowSkeleton(arrow),
+        strokeColor: COLORS.BLACK,
+      });
       if (arrow.sequenceNumber) {
         elements.push(
-          transformToExcalidrawContainerSkeleton(arrow.sequenceNumber)
+          transformToExcalidrawContainerSkeleton(arrow.sequenceNumber),
         );
       }
     });

@@ -3,10 +3,11 @@ import { parseMermaid } from "./parseMermaid.js";
 
 export interface MermaidOptions {
   fontSize?: number;
+  prettify?: boolean;
 }
 const parseMermaidToExcalidraw = async (
   definition: string,
-  options: MermaidOptions = {}
+  options: MermaidOptions = {},
 ) => {
   const parsedMermaidData = await parseMermaid(definition);
   const excalidrawElements = graphToExcalidraw(parsedMermaidData, options);

@@ -11,7 +11,7 @@ export class GraphConverter<T = Flowchart | Sequence> {
   }: {
     converter: (
       graph: T,
-      options: Required<MermaidOptions>
+      options: Required<MermaidOptions>,
     ) => MermaidToExcalidrawResult;
   }) {
     this.converter = converter;
@@ -20,6 +20,7 @@ export class GraphConverter<T = Flowchart | Sequence> {
     return this.converter(graph, {
       ...options,
       fontSize: options.fontSize || DEFAULT_FONT_SIZE,
+      prettify: options.prettify || false,
     });
   };
 }
