@@ -26,6 +26,9 @@ function createSectionElement(
     backgroundColor: COLORS.BACKGROUND,
     strokeColor: COLORS.STROKE,
     roughness: 0,
+    roundness: {
+      type: 3,
+    },
     label: {
       text: section,
       fontSize: 20,
@@ -52,6 +55,9 @@ function createTaskElement(
     backgroundColor: COLORS.BACKGROUND,
     strokeColor: COLORS.STROKE,
     roughness: 0,
+    roundness: {
+      type: 3,
+    },
     label: {
       text: task.task,
       fontSize: 20,
@@ -78,9 +84,9 @@ function createEventElement(
     backgroundColor: COLORS.BACKGROUND,
     strokeColor: COLORS.STROKE,
     roughness: 0,
-    // roundness: {
-    //   type: 3,
-    // },
+    roundness: {
+      type: 3,
+    },
     label: {
       text: event,
       fontSize: 16,
