@@ -24,11 +24,6 @@ export const parseMermaidTimelineDiagram = (
 
   // @ts-ignore
   const mermaidParser = diagram.parser.yy;
-
-  console.log(mermaidParser.getSections());
-  console.log(mermaidParser.getTasks());
-  console.log(mermaidParser.getCommonDb().getDiagramTitle());
-
   const sections = mermaidParser.getSections();
   const tasks = mermaidParser.getTasks();
   const title = mermaidParser.getCommonDb().getDiagramTitle();

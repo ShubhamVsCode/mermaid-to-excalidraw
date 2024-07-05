@@ -154,9 +154,10 @@ export const TimelineDiagramToExcalidrawSkeletonConverter = new GraphConverter({
 
     if (sectionsLength > 0) {
       graph.sections.forEach((section) => {
-        const sectionTasks = graph.tasks.filter(
-          (task) => task.section === section,
+        const sectionTasks = Array.from(
+          new Set(graph.tasks.filter((task) => task.section === section)),
         );
+
         const sectionWidth =
           sectionTasks.length * MIN_TASK_WIDTH +
           TASK_DISTANCE * (sectionTasks.length - 1);
