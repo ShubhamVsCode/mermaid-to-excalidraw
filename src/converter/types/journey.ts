@@ -85,6 +85,9 @@ export const JourneyDiagramToExcalidrawSkeletonConverter = new GraphConverter({
         backgroundColor: COLORS.BACKGROUND,
         strokeColor: COLORS.STROKE,
         roughness: 0,
+        roundness: {
+          type: 3,
+        },
         label: {
           text: section,
           fontSize: 20,
@@ -108,6 +111,9 @@ export const JourneyDiagramToExcalidrawSkeletonConverter = new GraphConverter({
           backgroundColor: COLORS.BACKGROUND,
           strokeColor: COLORS.STROKE,
           roughness: 0,
+          roundness: {
+            type: 3,
+          },
           label: {
             text: task.task,
             fontSize: 20,
