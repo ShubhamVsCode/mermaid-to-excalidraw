@@ -69,7 +69,10 @@ function createEventElement(
   return {
     type: "rectangle",
     x: taskElement.x || 0,
-    y: (taskElement.y || 0) + 150 + eventIndex * 150,
+    y:
+      (taskElement.y || 0) +
+      150 +
+      eventIndex * (TASK_DISTANCE + MIN_TASK_HEIGHT),
     width: MIN_TASK_WIDTH,
     height: MIN_TASK_HEIGHT,
     backgroundColor: COLORS.BACKGROUND,
